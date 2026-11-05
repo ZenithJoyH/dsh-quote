@@ -171,4 +171,22 @@ assert.ok(documentListeners.keydown.some((fn) => fn.length >= 1), "submit key ha
 assert.ok(documentListeners.click.some((fn) => fn.length >= 1), "submit click handler is installed");
 assert.ok(documentStub.head.children.length >= 1, "stylesheet is installed");
 
+// ---- assistant action renders and collects the whole reply ----
+const actionEntry = registered.find((r) => r.kind === "slot" && r.entry.name === "conversation.chat.assistant-actions");
+const snapshot = {
+  nodes: new Map([["node-1", {
+    data: { finalNode: { messageId: "m9", blocks: [{ kind: "text", text: "whole reply" }], time: "2026-11-05T08:30:00+08:00" } }
+  }]])
+};
+const tree = actionEntry.component({
+  messageId: "m9",
+  sessionId: "session-2",
+  t,
+  useChat: (selector) => selector(snapshot)
+});
+assert.ok(tree && tree.type === "button", "action renders a button");
+tree.props.onClick();
+assert.strictEqual(api.quoteItems("session-2").length, 1);
+assert.strictEqual(api.quoteItems("session-2")[0].text, "whole reply");
+
 console.log("ok — dsh-quote smoke test passed");

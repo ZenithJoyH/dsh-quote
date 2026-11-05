@@ -1,0 +1,46 @@
+{
+  "name": "dsh-quote",
+  "version": "0.1.0",
+  "description": "DSH web plugin: collect several quoted fragments as cards above the composer, then send them as one attributed blockquote. DSH Web 插件：多段引用卡片。",
+  "keywords": [
+    "dsh",
+    "deepseek-harness",
+    "plugin",
+    "quote",
+    "reply",
+    "web"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ZenithJoyH/dsh-quote.git"
+  },
+  "type": "module",
+  "main": "lib/index.js",
+  "exports": {
+    ".": {
+      "default": "./lib/index.js"
+    },
+    "./client": {
+      "default": "./lib/client.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "dsh": {
+    "client": {
+      "platform": "web",
+      "inject": [
+        "@deepseek-ai/dsh-client-runtime",
+        "@deepseek-ai/dsh-client-locale",
+        "@deepseek-ai/dsh-client-ui-conversation"
+      ]
+    }
+  },
+  "files": [
+    "lib/index.js",
+    "lib/client.js"
+  ],
+  "scripts": {
+    "test": "node test/client.smoke.cjs"
+  },
+  "license": "MIT"
+}

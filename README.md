@@ -41,6 +41,20 @@
 
 ## 安装
 
+### 从 GitHub 安装（推荐）
+
+```bash
+dsh plugin --profile web add github:ZenithJoyH/dsh-quote
+```
+
+桌面端 profile 使用：
+
+```bash
+dsh plugin --profile desktop add github:ZenithJoyH/dsh-quote
+```
+
+安装后重启 `dsh web` / 桌面端（或刷新页面）。
+
 ### 手动安装（本机）
 
 1. 把本仓库复制到 dsh profile 的 `node_modules` 下，例如：
@@ -63,7 +77,20 @@
 
 ### 卸载
 
-删除 `cordis.patch.yml` 中的 `dsh-quote` 条目和 `node_modules/dsh-quote` 目录，重启即可。
+```bash
+dsh plugin --profile web remove dsh-quote
+```
+
+或手动删除 `cordis.patch.yml` 中的 `dsh-quote` 条目和 `node_modules/dsh-quote` 目录，重启即可。
+
+## 兼容性与权限
+
+- 目标版本：DeepSeek Harness 0.2.x；
+- 平台：Web / 桌面端（client 插件，`platform: web`）；
+- 权限：仅使用客户端槽位、locale 与输入状态机；不发起网络请求、不读取文件、不执行命令；
+- 数据：引用卡片只保存在当前页面内存中，不上传任何内容；
+- 分类：会话与消息（Session & Messages）。
+
 
 ## 实现说明
 

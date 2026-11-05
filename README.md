@@ -1,5 +1,7 @@
 # dsh-quote-cards
 
+[![npm version](https://img.shields.io/npm/v/dsh-quote-cards.svg)](https://www.npmjs.com/package/dsh-quote-cards)
+
 > 一个 [DeepSeek Harness (dsh)](https://github.com/deepseek-ai/deepseek-harness) Web 插件：把引用变成**输入框上方的多张引用卡片**，发送时再合并成带出处的引用块。
 >
 > A DSH Web plugin that collects quotes as **cards above the composer** and sends them as one attributed blockquote.

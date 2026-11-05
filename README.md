@@ -1,4 +1,4 @@
-# dsh-quote
+# dsh-quote-cards
 
 > 一个 [DeepSeek Harness (dsh)](https://github.com/deepseek-ai/deepseek-harness) Web 插件：把引用变成**输入框上方的多张引用卡片**，发送时再合并成带出处的引用块。
 >
@@ -6,7 +6,7 @@
 
 ## 为什么重写
 
-原来的引用插件把整段原文以 `> …` 直接塞进输入框：引用一多，输入框就被原文淹没，删起来也费劲。`dsh-quote` 把「选什么」和「写什么」分开：
+原来的引用插件把整段原文以 `> …` 直接塞进输入框：引用一多，输入框就被原文淹没，删起来也费劲。`dsh-quote-cards` 把「选什么」和「写什么」分开：
 
 - 引用时只往输入框上方加一张小卡片，不动你正在写的草稿；
 - 可以连续引用多段，逐条预览、逐条删除；
@@ -41,26 +41,34 @@
 
 ## 安装
 
-### 从 GitHub 安装（推荐）
+### 从 npm 安装（推荐）
 
 ```bash
-dsh plugin --profile web add github:ZenithJoyH/dsh-quote
+dsh plugin --profile web add dsh-quote-cards
 ```
 
 桌面端 profile 使用：
 
 ```bash
-dsh plugin --profile desktop add github:ZenithJoyH/dsh-quote
+dsh plugin --profile desktop add dsh-quote-cards
 ```
 
 安装后重启 `dsh web` / 桌面端（或刷新页面）。
+
+### 从 GitHub 源码安装
+
+未发布 npm 或想跟进最新提交时：
+
+```bash
+dsh plugin --profile web add github:ZenithJoyH/dsh-quote
+```
 
 ### 手动安装（本机）
 
 1. 把本仓库复制到 dsh profile 的 `node_modules` 下，例如：
 
    ```bash
-   cp -R dsh-quote "$DSH_HOME/profiles/desktop/node_modules/dsh-quote"
+   cp -R dsh-quote "$DSH_HOME/profiles/desktop/node_modules/dsh-quote-cards"
    ```
 
 2. 在 `$DSH_HOME/profiles/desktop/cordis.patch.yml` 的 `insert:` 列表中加入：
@@ -68,7 +76,7 @@ dsh plugin --profile desktop add github:ZenithJoyH/dsh-quote
    ```yaml
    - insert:
        - id: quote-dock
-         name: "dsh-quote"
+         name: "dsh-quote-cards"
    ```
 
    如果之前装过旧的 `dsh-quote-reply`，把对应条目删掉，避免两个引用按钮同时出现。
@@ -78,10 +86,10 @@ dsh plugin --profile desktop add github:ZenithJoyH/dsh-quote
 ### 卸载
 
 ```bash
-dsh plugin --profile web remove dsh-quote
+dsh plugin --profile web remove dsh-quote-cards
 ```
 
-或手动删除 `cordis.patch.yml` 中的 `dsh-quote` 条目和 `node_modules/dsh-quote` 目录，重启即可。
+或手动删除 `cordis.patch.yml` 中的 `dsh-quote-cards` 条目和 `node_modules/dsh-quote-cards` 目录，重启即可。
 
 ## 兼容性与权限
 

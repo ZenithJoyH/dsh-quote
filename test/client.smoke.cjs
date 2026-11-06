@@ -1,3 +1,4 @@
+process.env.TZ = "Asia/Shanghai";
 // Smoke test for dsh-quote's client bundle body (no browser needed).
 const fs = require("fs");
 const vm = require("vm");

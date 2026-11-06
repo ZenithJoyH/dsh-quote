@@ -1,6 +1,6 @@
 {
   "name": "dsh-quote-cards",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "DSH web plugin: collect quoted fragments as cards above the composer, then send them as one attributed blockquote. DSH Web 插件：多段引用卡片。",
   "keywords": [
     "dsh",
@@ -30,6 +30,9 @@
     "./package.json": "./package.json"
   },
   "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
     "client": {
       "platform": "web",
       "inject": [
@@ -41,7 +44,8 @@
   },
   "files": [
     "lib/index.js",
-    "lib/client.js"
+    "lib/client.js",
+    "cordis.patch.yml"
   ],
   "scripts": {
     "test": "node test/client.smoke.cjs"

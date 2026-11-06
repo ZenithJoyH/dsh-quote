@@ -1,0 +1,6 @@
+# dsh-quote-cards bundle patch for DeepSeek Harness (dsh).
+# `dsh plugin add dsh-quote-cards` applies this patch to the profile and
+# mounts the plugin; the row resolves the package from profile node_modules.
+- insert:
+    - id: quote-dock
+      name: 'dsh-quote-cards'

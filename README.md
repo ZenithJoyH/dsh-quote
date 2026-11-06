@@ -2,6 +2,10 @@
 
 [![npm version](https://img.shields.io/npm/v/dsh-quote-cards.svg)](https://www.npmjs.com/package/dsh-quote-cards)
 
+> ⚠️ **当前请从 GitHub 源安装。** npm 上的 `0.1.0` 是旧包，还没有 bundle patch，插件管理器会拒绝一键安装；带 bundle patch 的 `0.1.1` 正在等待发布。
+>
+> **Install from GitHub for now.** npm `0.1.0` predates the bundle patch and is refused by the plugin manager; `0.1.1` is pending publication.
+
 > 一个 [DeepSeek Harness (dsh)](https://github.com/deepseek-ai/deepseek-harness) Web 插件：把引用变成**输入框上方的多张引用卡片**，发送时再合并成带出处的引用块。
 >
 > A DSH Web plugin that collects quotes as **cards above the composer** and sends them as one attributed blockquote.
@@ -43,26 +47,28 @@
 
 ## 安装
 
-### 从 npm 安装（推荐）
+### 从 GitHub 安装（当前推荐）
 
 ```bash
-dsh plugin --profile web add dsh-quote-cards
+dsh plugin --profile web add github:ZenithJoyH/dsh-quote
 ```
 
 桌面端 profile 使用：
 
 ```bash
-dsh plugin --profile desktop add dsh-quote-cards
+dsh plugin --profile desktop add github:ZenithJoyH/dsh-quote
 ```
 
 安装后重启 `dsh web` / 桌面端（或刷新页面）。
 
-### 从 GitHub 源码安装
+### 从 npm 安装（0.1.1 发布后）
 
-未发布 npm 或想跟进最新提交时：
+> 目前不要用 npm 安装：`0.1.0` 没有 bundle patch，插件管理器会报 “not a bundle”。
+
+`0.1.1` 发布后可用：
 
 ```bash
-dsh plugin --profile web add github:ZenithJoyH/dsh-quote
+dsh plugin --profile web add dsh-quote-cards
 ```
 
 ### 手动安装（本机）
@@ -73,15 +79,22 @@ dsh plugin --profile web add github:ZenithJoyH/dsh-quote
    cp -R dsh-quote "$DSH_HOME/profiles/desktop/node_modules/dsh-quote-cards"
    ```
 
-2. 在 `$DSH_HOME/profiles/desktop/cordis.patch.yml` 的 `insert:` 列表中加入：
+2. 把包名加入 profile 的 `dsh.profile.bundles`，让 Loader 应用它的 `cordis.patch.yml`。编辑 `$DSH_HOME/profiles/desktop/package.json`：
 
-   ```yaml
-   - insert:
-       - id: quote-dock
-         name: "dsh-quote-cards"
+   ```json
+   {
+     "dsh": {
+       "profile": {
+         "bundles": [
+           "...",
+           "dsh-quote-cards"
+         ]
+       }
+     }
+   }
    ```
 
-   如果之前装过旧的 `dsh-quote-reply`，把对应条目删掉，避免两个引用按钮同时出现。
+   不要把 `dsh-quote-cards` 再手动写进 `cordis.patch.yml` 的 `insert`，否则会和 bundle patch 重复挂载。
 
 3. 重启 `dsh web` / 桌面端，刷新页面。
 
@@ -91,7 +104,7 @@ dsh plugin --profile web add github:ZenithJoyH/dsh-quote
 dsh plugin --profile web remove dsh-quote-cards
 ```
 
-或手动删除 `cordis.patch.yml` 中的 `dsh-quote-cards` 条目和 `node_modules/dsh-quote-cards` 目录，重启即可。
+或手动删除 profile `dsh.profile.bundles` 中的 `dsh-quote-cards` 条目和 `node_modules/dsh-quote-cards` 目录，重启即可。
 
 ## 兼容性与权限
 

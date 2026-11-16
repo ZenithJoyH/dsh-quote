@@ -114,11 +114,14 @@ const t = (key, params) => {
   for (const [name, value] of Object.entries(params ?? {})) out = out.replace("{" + name + "}", String(value));
   return out;
 };
-const composed = api.composeDraft(items, "my reply", t);
+api.setQuoteReply(S, items[0].id, "reply to hello");
+const itemsWithReply = api.quoteItems(S);
+const composed = api.composeDraft(itemsWithReply, "my reply", t);
 assert.ok(composed.includes("> **引用 · 助手 · 14:22**"), composed);
-assert.ok(composed.includes("> hello"), composed);
+assert.ok(composed.includes("> hello\n\nreply to hello"), composed);
 assert.ok(composed.includes("> **引用 · 选中文字**"), composed);
 assert.ok(composed.endsWith("\n\nmy reply"), composed);
+api.setQuoteReply(S, items[0].id, "");
 
 assert.strictEqual(api.composeDraft([], "only me", t), "only me");
 assert.strictEqual(api.composeDraft([], "  ", t), "");
@@ -151,6 +154,23 @@ assert.ok(submittedDraft.includes("> quoted body"), submittedDraft);
 assert.ok(submittedDraft.endsWith("\n\nmy answer"), submittedDraft);
 assert.strictEqual(submitted, 1);
 assert.strictEqual(api.quoteItems(S).length, 0, "quotes clear after submit");
+
+// replies-only submit: no composer draft, but a per-quote reply exists
+api.addQuote(S, { role: "assistant", messageId: "m3", text: "another quote", time: "2026-11-05T09:05:00+08:00" });
+const solo = api.quoteItems(S)[0];
+api.setQuoteReply(S, solo.id, "only card reply");
+let soloDraft = null;
+let soloSubmits = 0;
+api.setActiveComposer({
+  sessionId: S,
+  t,
+  phase: "plain",
+  draftRef: { current: "" },
+  inputActions: { setDraft(text) { soloDraft = text; }, submit() { soloSubmits += 1; } }
+});
+assert.strictEqual(api.submitWithQuotes(), true);
+assert.ok(soloDraft.includes("> another quote\n\nonly card reply"), soloDraft);
+assert.strictEqual(soloSubmits, 1);
 api.setActiveComposer(null);
 
 // ---- plugin registration ----

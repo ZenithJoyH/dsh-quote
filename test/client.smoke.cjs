@@ -188,6 +188,9 @@ loaded.apply(ctx);
 assert.ok(registered.some((r) => r.kind === "locale" && r.ns === "dshQuote" && r.dicts.zh && r.dicts.en));
 assert.ok(registered.some((r) => r.kind === "slot" && r.entry.name === "conversation.input.dock"));
 assert.ok(registered.some((r) => r.kind === "slot" && r.entry.name === "conversation.chat.assistant-actions"));
+const selectionEntry = registered.find((r) => r.kind === "slot" && r.entry.name === "conversation.chat.text-interaction");
+assert.ok(selectionEntry, "selection action is registered");
+assert.strictEqual(selectionEntry.entry.key, "quote", "it replaces the built-in quote action");
 assert.ok(documentListeners.keydown.some((fn) => fn.length >= 1), "submit key handler is installed");
 assert.ok(documentListeners.click.some((fn) => fn.length >= 1), "submit click handler is installed");
 assert.ok(documentStub.head.children.length >= 1, "stylesheet is installed");
@@ -209,5 +212,23 @@ assert.ok(tree && tree.type === "button", "action renders a button");
 tree.props.onClick();
 assert.strictEqual(api.quoteItems("session-2").length, 1);
 assert.strictEqual(api.quoteItems("session-2")[0].text, "whole reply");
+
+// ---- selection action adds a card instead of inserting text ----
+let dismissed = 0;
+let cleared = 0;
+const selectionButton = selectionEntry.component({
+  dismiss: () => { dismissed += 1; },
+  readText: () => "selected fragment",
+  clearSelection: () => { cleared += 1; },
+  sessionId: "session-3",
+  t,
+  useSession: (selector) => selector({ removed: false, subagent: null })
+});
+assert.ok(selectionButton && selectionButton.type === "button");
+selectionButton.props.onClick();
+assert.strictEqual(api.quoteItems("session-3").length, 1);
+assert.strictEqual(api.quoteItems("session-3")[0].text, "selected fragment");
+assert.strictEqual(dismissed, 1);
+assert.strictEqual(cleared, 1);
 
 console.log("ok — dsh-quote smoke test passed");

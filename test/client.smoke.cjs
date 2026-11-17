@@ -171,6 +171,24 @@ api.setActiveComposer({
 assert.strictEqual(api.submitWithQuotes(), true);
 assert.ok(soloDraft.includes("> another quote\n\nonly card reply"), soloDraft);
 assert.strictEqual(soloSubmits, 1);
+
+// prefill: put quote+reply into the composer draft without submitting
+api.addQuote(S, { role: "assistant", messageId: "m4", text: "draft quote", time: "2026-11-05T10:00:00+08:00" });
+const draftItem = api.quoteItems(S)[0];
+api.setQuoteReply(S, draftItem.id, "draft reply");
+let prefilled = null;
+let prefillSubmits = 0;
+api.setActiveComposer({
+  sessionId: S,
+  t,
+  phase: "plain",
+  draftRef: { current: "" },
+  inputActions: { setDraft(text) { prefilled = text; }, submit() { prefillSubmits += 1; } }
+});
+assert.strictEqual(api.prefillWithQuotes(), true);
+assert.ok(prefilled.includes("> draft quote\n\ndraft reply"), prefilled);
+assert.strictEqual(prefillSubmits, 0, "prefill must not send");
+assert.strictEqual(api.quoteItems(S).length, 0, "cards clear after prefill");
 api.setActiveComposer(null);
 
 // ---- plugin registration ----

@@ -208,7 +208,8 @@ assert.ok(registered.some((r) => r.kind === "slot" && r.entry.name === "conversa
 assert.ok(registered.some((r) => r.kind === "slot" && r.entry.name === "conversation.chat.assistant-actions"));
 const selectionEntry = registered.find((r) => r.kind === "slot" && r.entry.name === "conversation.chat.text-interaction");
 assert.ok(selectionEntry, "selection action is registered");
-assert.strictEqual(selectionEntry.entry.key, "quote", "it replaces the built-in quote action");
+assert.strictEqual(selectionEntry.entry.key, "quote", "it targets the built-in quote action");
+assert.strictEqual(selectionEntry.entry.priority, -1, "lower priority shadows the built-in entry");
 assert.ok(documentListeners.keydown.some((fn) => fn.length >= 1), "submit key handler is installed");
 assert.ok(documentListeners.click.some((fn) => fn.length >= 1), "submit click handler is installed");
 assert.ok(documentStub.head.children.length >= 1, "stylesheet is installed");

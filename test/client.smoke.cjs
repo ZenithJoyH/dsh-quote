@@ -265,4 +265,23 @@ assert.strictEqual(api.quoteItems("session-3")[0].text, "selected fragment");
 assert.strictEqual(dismissed, 1);
 assert.strictEqual(cleared, 1);
 
+// ---- side chat handoff ----
+api.addQuote(S, { role: "assistant", messageId: "m5", text: "side chat quote", time: "2026-11-05T11:00:00+08:00" });
+let sideChatArgs = null;
+api.setPluginCtx({ get: (name) => name === "sideChat" ? { open(parentId, draft) { sideChatArgs = { parentId, draft }; return true; } } : undefined });
+api.setActiveComposer({
+  sessionId: S,
+  t,
+  phase: "plain",
+  draftRef: { current: "main draft stays" },
+  inputActions: { setDraft() {}, submit() {} }
+});
+assert.strictEqual(api.openInSideChat(), true);
+assert.ok(sideChatArgs && sideChatArgs.parentId === S);
+assert.ok(sideChatArgs.draft.includes("> side chat quote"));
+assert.ok(!sideChatArgs.draft.includes("main draft stays"), "the main draft is not moved");
+assert.strictEqual(api.quoteItems(S).length, 0, "cards clear after handoff");
+api.setActiveComposer(null);
+api.setPluginCtx(null);
+
 console.log("ok — dsh-quote smoke test passed");

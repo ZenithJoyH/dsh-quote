@@ -191,6 +191,21 @@ assert.strictEqual(prefillSubmits, 0, "prefill must not send");
 assert.strictEqual(api.quoteItems(S).length, 0, "cards clear after prefill");
 api.setActiveComposer(null);
 
+// ---- semantic prefill draft (native quote previews) ----
+const fakeFormat = (text) => text.split("\n").map((line) => "> " + line).join("\n");
+const snap = api.buildPrefillDraft([
+  { text: "first", reply: "reply one" },
+  { text: "second", reply: "" }
+], "", fakeFormat);
+assert.ok(snap, "semantic snapshot is built");
+assert.strictEqual(snap.quotes.length, 2);
+assert.strictEqual(snap.quotes[0].offset, 0);
+assert.strictEqual(snap.quotes[0].length, fakeFormat("first").length);
+assert.strictEqual(snap.text.slice(snap.quotes[0].offset, snap.quotes[0].offset + snap.quotes[0].length), fakeFormat("first"));
+assert.ok(snap.text.includes("> first\n\nreply one"));
+assert.ok(snap.text.includes("> second"));
+assert.strictEqual(snap.references.length, 0);
+
 // ---- plugin registration ----
 const registered = [];
 const effects = [];

@@ -1,9 +1,10 @@
 name: publish
 
+# Publishing is paused on purpose: the desktop profile installs this plugin from
+# source (link:), so a registry release is not needed. Only a manual
+# workflow_dispatch can publish, so a GitHub release never ships to npm by accident.
 on:
   workflow_dispatch:
-  release:
-    types: [published]
 
 permissions:
   contents: read
